@@ -1,3 +1,4 @@
+import { fetchData } from "@/services/api";
 import create from "zustand";
 
 interface Character {
@@ -13,9 +14,9 @@ interface CharacterState {
   listCharacter: Character[];
   setCharacter: (character: Character) => void;
   addCharacterToList: (character: Character) => void;
-  addCharactersToList: (characters: Character[]) => void;
   setListCharacter: (characters: Character[]) => void;
   removeCharacterFromList: (characterName: string) => void;
+  fetchAndSetCharacters: any;
 }
 
 export const useCharacterStore = create<CharacterState>((set) => ({
@@ -31,10 +32,7 @@ export const useCharacterStore = create<CharacterState>((set) => ({
   setCharacter: (character) => set({ character }),
   addCharacterToList: (character) =>
     set((state) => ({ listCharacter: [...state.listCharacter, character] })),
-  addCharactersToList: (characters) =>
-    set((state) => ({
-      listCharacter: [...state.listCharacter, ...characters],
-    })),
+
   setListCharacter: (characters) => set({ listCharacter: characters }),
   removeCharacterFromList: (characterName) =>
     set((state) => ({
@@ -42,4 +40,13 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         (character) => character.name !== characterName
       ),
     })),
+
+  fetchAndSetCharacters: async (page: any, pageSize: any) => {
+    try {
+      const data = await fetchData("character", { page });
+      set({ listCharacter: data.results });
+    } catch (error) {
+      console.error("Error al obtener los personajes:", error);
+    }
+  },
 }));

@@ -3,7 +3,7 @@ import { characterSchema } from "../models/characterSchema";
 import { useToast } from "@/components/ui/use-toast";
 
 export const useCreateCharacterForm = () => {
-  const { character, setCharacter, addCharacterToList } = useCharacterStore(); // Asegúrate de desestructurar addCharacterToList aquí
+  const { character, setCharacter, addCharacterToList } = useCharacterStore();
   const { toast } = useToast();
 
   const handleChange = (e: any) => {

@@ -38,13 +38,14 @@ import {
 import { fetchData } from "../../services/api";
 import { useCharacterStore } from "@/stores/characterStore";
 
-export type Character = {
+interface Character {
   id: string;
-  species: string;
-  status: string;
-  gender: string;
   name: string;
-};
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+}
 
 export const columns: ColumnDef<Character>[] = [
   {
@@ -202,7 +203,7 @@ export function TableCharacter() {
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     setColumnFilters([
       { id: "name", value: nameFilter },
       { id: "species", value: speciesFilter },
@@ -215,21 +216,20 @@ export function TableCharacter() {
   const [data, setData] = useState<Character[]>([]);
 
   useEffect(() => {
-    const getCharacters = async () => {
+    const fetchCharacters = async () => {
       setIsLoading(true);
-
       try {
-        const data = await fetchData("character", { page, pageSize });
-        setData(data.results);
-        useCharacterStore.getState().setListCharacter(data.results);
+        await useCharacterStore.getState().fetchAndSetCharacters(page);
+        const characters = useCharacterStore.getState().listCharacter;
+        setData(characters as Character[]);
       } catch (error) {
         console.error("Error al obtener los personajes:", error);
       }
       setIsLoading(false);
     };
 
-    getCharacters();
-  }, [page, pageSize]);
+    fetchCharacters();
+  }, [page]);
 
   const handlePreviousPage = () => {
     setPage((current) => Math.max(current - 1, 1));
@@ -238,9 +238,6 @@ export function TableCharacter() {
   const handleNextPage = () => {
     setPage((current) => current + 1);
   };
-
-  const dats = useCharacterStore((state) => state.listCharacter);
-  console.log(dats);
 
   const table = useReactTable({
     data,

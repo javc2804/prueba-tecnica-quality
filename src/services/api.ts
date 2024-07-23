@@ -1,10 +1,6 @@
-export const fetchData = async (
-  path = "",
-  options = { page: 1, pageSize: 10 }
-) => {
-  const { page, pageSize } = options;
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/${path}?page=${page}&pageSize=${pageSize}`;
-
+export const fetchData = async (path = "", options = { page: 1 }) => {
+  const { page } = options;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${path}?page=${page}`;
   try {
     const response = await fetch(url);
     if (!response.ok) {
