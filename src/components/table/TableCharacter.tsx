@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/table";
 
 import { fetchData } from "../../services/api";
+import { useCharacterStore } from "@/stores/characterStore";
 
 export type Character = {
   id: string;
@@ -220,6 +221,7 @@ export function TableCharacter() {
       try {
         const data = await fetchData("character", { page, pageSize });
         setData(data.results);
+        useCharacterStore.getState().setListCharacter(data.results);
       } catch (error) {
         console.error("Error al obtener los personajes:", error);
       }
@@ -236,6 +238,9 @@ export function TableCharacter() {
   const handleNextPage = () => {
     setPage((current) => current + 1);
   };
+
+  const dats = useCharacterStore((state) => state.listCharacter);
+  console.log(dats);
 
   const table = useReactTable({
     data,

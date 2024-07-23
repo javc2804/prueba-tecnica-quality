@@ -3,7 +3,7 @@ import { characterSchema } from "../models/characterSchema";
 import { useToast } from "@/components/ui/use-toast";
 
 export const useCreateCharacterForm = () => {
-  const { character, setCharacter } = useCharacterStore();
+  const { character, setCharacter, addCharacterToList } = useCharacterStore(); // Asegúrate de desestructurar addCharacterToList aquí
   const { toast } = useToast();
 
   const handleChange = (e: any) => {
@@ -21,6 +21,7 @@ export const useCreateCharacterForm = () => {
       text = "Verifica el formulario, hay campos incorrectos";
       status = "Error";
     } else {
+      addCharacterToList(result.data);
       text = "Personaje creado correctamente";
       status = "Correcto";
     }
