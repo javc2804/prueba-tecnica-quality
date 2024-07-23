@@ -1,6 +1,5 @@
 "use client";
-
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,13 +35,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { fetchData } from "../../services/api";
+
 export type Character = {
   id: string;
   species: string;
   status: string;
   gender: string;
   name: string;
-  data: object;
 };
 
 export const columns: ColumnDef<Character>[] = [
@@ -69,13 +69,13 @@ export const columns: ColumnDef<Character>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name", // Accede al campo name para esta columna
-    header: () => "Nombre", // El encabezado de la columna será "Name"
-    cell: ({ row }) => row.getValue("name"), // Muestra el valor de name
+    accessorKey: "name",
+    header: () => "Nombre",
+    cell: ({ row }) => row.getValue("name"),
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: "Estado",
     cell: ({ row }) => {
       const status = row.getValue("status");
       let statusText = "";
@@ -89,6 +89,23 @@ export const columns: ColumnDef<Character>[] = [
         default:
       }
       return <div className="capitalize">{statusText}</div>;
+    },
+  },
+  {
+    accessorKey: "species",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Especie
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return <div className="capitalize">{row.getValue("species")}</div>;
     },
   },
   {
@@ -120,10 +137,20 @@ export const columns: ColumnDef<Character>[] = [
     },
   },
   {
-    accessorKey: "species",
-    header: () => <div className="text-right">Especie</div>,
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tipo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
-      <div className="lowercase">{row.getValue("species")}</div>;
+      return <div className="capitalize">{row.getValue("type")}</div>;
     },
   },
   {
@@ -155,14 +182,55 @@ export const columns: ColumnDef<Character>[] = [
   },
 ];
 
-export function TableCharacter({ data }: { data: any }) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+export function TableCharacter() {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const [nameFilter, setNameFilter] = useState("");
+  const [speciesFilter, setSpeciesFilter] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+
+  React.useEffect(() => {
+    setColumnFilters([
+      { id: "name", value: nameFilter },
+      { id: "species", value: speciesFilter },
+      { id: "gender", value: genderFilter },
+      { id: "type", value: typeFilter },
+      { id: "status", value: statusFilter },
+    ]);
+  }, [nameFilter, speciesFilter, genderFilter, typeFilter, statusFilter]);
+
+  const [data, setData] = useState<Character[]>([]);
+
+  useEffect(() => {
+    const getCharacters = async () => {
+      try {
+        const data = await fetchData("character", { page, pageSize });
+        setData(data.results);
+      } catch (error) {
+        console.error("Error al obtener los personajes:", error);
+      }
+    };
+
+    getCharacters();
+  }, [page, pageSize]);
+
+  const handlePreviousPage = () => {
+    setPage((current) => Math.max(current - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((current) => current + 1);
+  };
 
   const table = useReactTable({
     data,
@@ -194,10 +262,18 @@ export function TableCharacter({ data }: { data: any }) {
           }
           className="max-w-sm"
         />
+        <Input
+          placeholder="Filter by gender..."
+          value={(table.getColumn("gender")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("gender")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
+              Columnas <ChevronDown className="ml-2 h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -274,15 +350,15 @@ export function TableCharacter({ data }: { data: any }) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={handlePreviousPage}
+            disabled={page === 1}
           >
             Anterior
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
+            onClick={handleNextPage}
             disabled={!table.getCanNextPage()}
           >
             Siguiente

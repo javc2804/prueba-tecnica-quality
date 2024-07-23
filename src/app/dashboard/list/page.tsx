@@ -1,4 +1,3 @@
-// Importaciones necesarias
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../services/api";
@@ -14,28 +13,9 @@ interface Character {
 }
 
 const ListPage = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
-
-  useEffect(() => {
-    const getCharacters = async () => {
-      try {
-        const data = await fetchData("character");
-        setCharacters(data.results);
-      } catch (error) {
-        console.error("Error al obtener los personajes:", error);
-      }
-    };
-
-    getCharacters();
-  }, []);
-
   return (
     <div>
-      {characters.length > 0 ? (
-        <TableCharacter data={characters} />
-      ) : (
-        <p>Cargando personajes...</p>
-      )}
+      <TableCharacter />
     </div>
   );
 };

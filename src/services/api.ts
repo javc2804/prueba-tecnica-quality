@@ -1,8 +1,12 @@
-export const fetchData = async (path = "") => {
-  console.log(`${process.env.NEXT_PUBLIC_API_URL}/${path}`);
+export const fetchData = async (
+  path = "",
+  options = { page: 1, pageSize: 10 }
+) => {
+  const { page, pageSize } = options;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/${path}?page=${page}&pageSize=${pageSize}`;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${path}`);
+    const response = await fetch(url);
     if (!response.ok) {
       console.error(
         `Error HTTP: ${response.status} al realizar la petición GET`
