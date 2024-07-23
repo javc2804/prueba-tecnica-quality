@@ -40,7 +40,7 @@ import { fetchData } from "../../services/api";
 export type Character = {
   id: string;
   episode: string;
-  gender: string;
+  air_date: Date;
   name: string;
 };
 
@@ -145,6 +145,7 @@ export function TableEpisode() {
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isLastPage, setIsLastPage] = useState(false);
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -165,6 +166,7 @@ export function TableEpisode() {
       try {
         const data = await fetchData("episode", { page, pageSize });
         setData(data.results);
+        setIsLastPage(data.results.length < pageSize);
       } catch (error) {
         console.error("Error al obtener los personajes:", error);
       }
@@ -218,7 +220,7 @@ export function TableEpisode() {
               }
               className="max-w-sm"
             />
-            <Input
+            {/* <Input
               placeholder="Filter by gender..."
               value={
                 (table.getColumn("gender")?.getFilterValue() as string) ?? ""
@@ -227,7 +229,7 @@ export function TableEpisode() {
                 table.getColumn("gender")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
-            />
+            /> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="ml-auto">
@@ -319,7 +321,7 @@ export function TableEpisode() {
                 variant="outline"
                 size="sm"
                 onClick={handleNextPage}
-                disabled={!table.getCanNextPage()}
+                disabled={isLastPage}
               >
                 Siguiente
               </Button>
