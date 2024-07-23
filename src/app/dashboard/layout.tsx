@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 const links = [
+  { name: "Crear personajes", href: "create" },
   { name: "Mostrar personajes", href: "list" },
   { name: "Mostrar episodios", href: "episodes" },
   { name: "button", href: "button" },
