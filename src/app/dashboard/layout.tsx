@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Toaster } from "@/components/ui/toaster";
 
 const links = [
   { name: "Crear personajes", href: "create" },
@@ -111,6 +112,7 @@ export default function DashboardLayout({
                 <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">
                   {children}
                 </div>
+                <Toaster />
               </div>
             </div>
           </main>
