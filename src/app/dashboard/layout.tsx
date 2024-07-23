@@ -5,6 +5,7 @@ import Link from "next/link";
 
 const links = [
   { name: "Mostrar personajes", href: "list" },
+  { name: "Mostrar episodios", href: "episodes" },
   { name: "button", href: "button" },
   { name: "accordion", href: "accordion" },
 ];
