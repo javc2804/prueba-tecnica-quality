@@ -211,7 +211,7 @@ export function TableEpisode() {
         <div>
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter by name..."
+              placeholder="Filtrar por nombre"
               value={
                 (table.getColumn("name")?.getFilterValue() as string) ?? ""
               }
@@ -220,16 +220,16 @@ export function TableEpisode() {
               }
               className="max-w-sm"
             />
-            {/* <Input
-              placeholder="Filter by gender..."
+            <Input
+              placeholder="Filtrar por episodio"
               value={
-                (table.getColumn("gender")?.getFilterValue() as string) ?? ""
+                (table.getColumn("episode")?.getFilterValue() as string) ?? ""
               }
               onChange={(event) =>
-                table.getColumn("gender")?.setFilterValue(event.target.value)
+                table.getColumn("episode")?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
-            /> */}
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="ml-auto">
