@@ -1,14 +1,21 @@
+// Importaciones necesarias
 "use client";
 import React, { useEffect, useState } from "react";
 import { fetchData } from "../../../services/api";
+import { TableCharacter } from "@/components/table/TableCharacter";
 
 interface Character {
-  id: number;
+  id: string;
+  gender: number;
+  status: string;
+  species: string;
   name: string;
+  data: object;
 }
 
 const ListPage = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
+
   useEffect(() => {
     const getCharacters = async () => {
       try {
@@ -24,12 +31,11 @@ const ListPage = () => {
 
   return (
     <div>
-      <h1>Personajes de Rick and Morty</h1>
-      <ul>
-        {characters.map((character) => (
-          <li key={character.id}>{character.name}</li>
-        ))}
-      </ul>
+      {characters.length > 0 ? (
+        <TableCharacter data={characters} />
+      ) : (
+        <p>Cargando personajes...</p>
+      )}
     </div>
   );
 };
