@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useCharacterStore } from "../../stores/store";
+import { characterSchema } from "../../models/characterSchema";
+import { useToast } from "@/components/ui/use-toast";
+import { Input } from "../ui/input";
 
 const AddCharacterForm: React.FC = () => {
+  const { toast } = useToast();
+
   const editingCharacter = useCharacterStore((state) => state.editingCharacter);
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
@@ -24,18 +29,40 @@ const AddCharacterForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const characterData = {
+      name,
+      status,
+      species,
+      type,
+    };
+
+    const result = characterSchema.safeParse(characterData);
+
+    const notify = (title: string, description: string) => {
+      toast({
+        title,
+        description,
+      });
+    };
+
+    if (!result.success) {
+      notify("Error", "Verifica los campos hay un error");
+      return;
+    }
+
     if (editingCharacter) {
-      updateCharacter({ ...editingCharacter, name, status, species, type });
+      updateCharacter({ ...editingCharacter, ...result.data });
+      notify("Correcto", "Personaje actualizado correctamente");
     } else {
       addCharacter({
         id: Date.now(),
-        name,
-        status,
-        species,
-        type,
+        ...result.data,
         local: true,
       });
+      notify("Correcto", "Personaje creado correctamente");
     }
+
     setName("");
     setStatus("");
     setSpecies("");
@@ -48,28 +75,28 @@ const AddCharacterForm: React.FC = () => {
       <h1 className="text-center text-2xl font-bold my-4">
         {editingCharacter ? "Editar Personaje" : "Crear Personaje"}
       </h1>{" "}
-      <input
+      <Input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Nombre"
         className="border border-gray-300 p-2 rounded-md"
       />
-      <input
+      <Input
         type="text"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         placeholder="Estado"
         className="border border-gray-300 p-2 rounded-md"
       />
-      <input
+      <Input
         type="text"
         value={species}
         onChange={(e) => setSpecies(e.target.value)}
         placeholder="Especie"
         className="border border-gray-300 p-2 rounded-md"
       />
-      <input
+      <Input
         type="text"
         value={type}
         onChange={(e) => setType(e.target.value)}

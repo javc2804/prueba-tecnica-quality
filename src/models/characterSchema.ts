@@ -5,5 +5,5 @@ export const characterSchema = z.object({
   status: z.string(),
   species: z.string(),
   type: z.string(),
-  gender: z.enum(["Male", "Female"]),
+  // gender: z.enum(["Male", "Female"]),
 });
