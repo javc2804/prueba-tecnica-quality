@@ -5,11 +5,8 @@ import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
 
 const links = [
-  { name: "Crear personajes", href: "create" },
-  { name: "Mostrar personajes", href: "list" },
-  { name: "Mostrar episodios", href: "episodes" },
-  { name: "button", href: "button" },
-  { name: "accordion", href: "accordion" },
+  { name: "Gestionar personajes", href: "characters" },
+  { name: "Gestionar episodios", href: "episodes" },
 ];
 
 export default function DashboardLayout({
