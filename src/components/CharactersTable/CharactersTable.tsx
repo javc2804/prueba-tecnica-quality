@@ -21,23 +21,24 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
   const { characters: localCharacters, setEditingCharacter } =
     useCharacterStore((state) => ({
       characters: state.characters,
-      updateCharacter: state.updateCharacter,
-      editingCharacter: state.editingCharacter,
       setEditingCharacter: state.setEditingCharacter,
     }));
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [filter, setFilter] = useState("");
-  const [filterField, setFilterField] = useState<keyof Character>("name");
+  const [filters, setFilters] = useState<Record<keyof Character, string>>(
+    {} as Record<keyof Character, string>
+  );
   const charactersPerPage = 10;
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
-  const filteredCharacters = combinedCharacters.filter((character) => {
-    if (!filter || !filterField) return true;
-    const fieldValue = character[filterField]?.toString().toLowerCase();
-    return fieldValue?.includes(filter.toLowerCase());
-  });
+  const filteredCharacters = combinedCharacters.filter((character) =>
+    Object.entries(filters).every(([field, value]) => {
+      const key = field as keyof Character;
+      const fieldValue = character[key]?.toString().toLowerCase();
+      return fieldValue?.includes(value.toLowerCase());
+    })
+  );
 
   const combinedAndSortedCharacters = filteredCharacters.sort((a, b) => {
     if (a.local && !b.local) return -1;
@@ -58,6 +59,13 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     setEditingCharacter(character);
   };
 
+  const handleFilterChange = (field: keyof Character, value: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [field]: value,
+    }));
+  };
+
   return (
     <>
       <Table>
@@ -66,46 +74,31 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
             <TableHead className="w-[100px]">
               <Input
                 placeholder="Filtrar por ID"
-                onChange={(e) => {
-                  setFilterField("id");
-                  setFilter(e.target.value);
-                }}
+                onChange={(e) => handleFilterChange("id", e.target.value)}
               />
             </TableHead>
             <TableHead>
               <Input
                 placeholder="Filtrar por Nombre"
-                onChange={(e) => {
-                  setFilterField("name");
-                  setFilter(e.target.value);
-                }}
+                onChange={(e) => handleFilterChange("name", e.target.value)}
               />
             </TableHead>
             <TableHead>
               <Input
                 placeholder="Filtrar por Estado"
-                onChange={(e) => {
-                  setFilterField("status");
-                  setFilter(e.target.value);
-                }}
+                onChange={(e) => handleFilterChange("status", e.target.value)}
               />
             </TableHead>
             <TableHead>
               <Input
                 placeholder="Filtrar por Especie"
-                onChange={(e) => {
-                  setFilterField("species");
-                  setFilter(e.target.value);
-                }}
+                onChange={(e) => handleFilterChange("species", e.target.value)}
               />
             </TableHead>
             <TableHead>
               <Input
                 placeholder="Filtrar por Tipo"
-                onChange={(e) => {
-                  setFilterField("type");
-                  setFilter(e.target.value);
-                }}
+                onChange={(e) => handleFilterChange("type", e.target.value)}
               />
             </TableHead>
             <TableHead>Acciones</TableHead>
