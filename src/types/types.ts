@@ -2,5 +2,7 @@ export interface Character {
   id: number;
   name: string;
   status: string;
+  type: string;
+  species: string;
   local: boolean;
 }

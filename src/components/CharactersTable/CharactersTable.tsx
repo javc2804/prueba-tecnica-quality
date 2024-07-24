@@ -69,6 +69,8 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
             <th>ID</th>
             <th>Name</th>
             <th>Estado</th>
+            <th>Especie</th>
+            <th>Tipo</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -76,28 +78,12 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           {currentCharacters.map((character) => (
             <tr key={character.id}>
               <td>{character.id}</td>
+              <td>{character.name}</td>
+              <td>{character.status}</td>
+              <td>{character.species}</td>
+              <td>{character.type}</td>
               <td>
-                {editingCharacter?.id === character.id ? (
-                  <input
-                    type="text"
-                    value={editingCharacter.name}
-                    onChange={(e) => handleEditChange(e, "name")}
-                  />
-                ) : (
-                  character.name
-                )}
-              </td>
-              <td>
-                {editingCharacter?.id === character.id
-                  ? editingCharacter.status
-                  : character.status}
-              </td>
-              <td>
-                {editingCharacter?.id === character.id ? (
-                  <button onClick={saveEdits}>Save</button>
-                ) : (
-                  <button onClick={() => startEditing(character)}>Edit</button>
-                )}
+                <button onClick={() => startEditing(character)}>Edit</button>
               </td>
             </tr>
           ))}

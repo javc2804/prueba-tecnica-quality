@@ -6,6 +6,8 @@ const AddCharacterForm: React.FC = () => {
   const editingCharacter = useCharacterStore((state) => state.editingCharacter);
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+  const [species, setSpecies] = useState(""); // Nuevo estado para especie
+  const [type, setType] = useState(""); // Nuevo estado para tipo
   const addCharacter = useCharacterStore((state) => state.addCharacter);
   const updateCharacter = useCharacterStore((state) => state.updateCharacter);
   const setEditingCharacter = useCharacterStore(
@@ -16,18 +18,29 @@ const AddCharacterForm: React.FC = () => {
     if (editingCharacter) {
       setName(editingCharacter.name);
       setStatus(editingCharacter.status);
+      setSpecies(editingCharacter.species || ""); // Ajuste para especie
+      setType(editingCharacter.type || ""); // Ajuste para tipo
     }
   }, [editingCharacter]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (editingCharacter) {
-      updateCharacter({ ...editingCharacter, name, status });
+      updateCharacter({ ...editingCharacter, name, status, species, type });
     } else {
-      addCharacter({ id: Date.now(), name, status, local: true });
+      addCharacter({
+        id: Date.now(),
+        name,
+        status,
+        species,
+        type,
+        local: true,
+      });
     }
     setName("");
     setStatus("");
+    setSpecies(""); // Limpiar estado de especie
+    setType(""); // Limpiar estado de tipo
     setEditingCharacter(null);
   };
 
@@ -44,6 +57,18 @@ const AddCharacterForm: React.FC = () => {
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         placeholder="Estado"
+      />
+      <input
+        type="text"
+        value={species}
+        onChange={(e) => setSpecies(e.target.value)}
+        placeholder="Especie"
+      />
+      <input
+        type="text"
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        placeholder="Tipo"
       />
       <button type="submit">Save Character</button>
     </form>
