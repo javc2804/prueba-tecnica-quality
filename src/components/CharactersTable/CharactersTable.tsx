@@ -5,14 +5,13 @@ import { Character } from "../../types/types";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 interface Props {
   apiCharacters: Character[];
@@ -28,11 +27,19 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     }));
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [filter, setFilter] = useState("");
+  const [filterField, setFilterField] = useState<keyof Character>("name");
   const charactersPerPage = 10;
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
-  const combinedAndSortedCharacters = combinedCharacters.sort((a, b) => {
+  const filteredCharacters = combinedCharacters.filter((character) => {
+    if (!filter || !filterField) return true;
+    const fieldValue = character[filterField]?.toString().toLowerCase();
+    return fieldValue?.includes(filter.toLowerCase());
+  });
+
+  const combinedAndSortedCharacters = filteredCharacters.sort((a, b) => {
     if (a.local && !b.local) return -1;
     if (!a.local && b.local) return 1;
     return a.id - b.id;
@@ -45,9 +52,7 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     indexOfLastCharacter
   );
 
-  const totalPages = Math.ceil(
-    combinedAndSortedCharacters.length / charactersPerPage
-  );
+  const totalPages = Math.ceil(filteredCharacters.length / charactersPerPage);
 
   const startEditing = (character: Character) => {
     setEditingCharacter(character);
@@ -58,11 +63,51 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">id</TableHead>
-            <TableHead>Nombre</TableHead>
-            <TableHead>Estado</TableHead>
-            <TableHead>Especie</TableHead>
-            <TableHead>Tipo</TableHead>
+            <TableHead className="w-[100px]">
+              <Input
+                placeholder="Filtrar por ID"
+                onChange={(e) => {
+                  setFilterField("id");
+                  setFilter(e.target.value);
+                }}
+              />
+            </TableHead>
+            <TableHead>
+              <Input
+                placeholder="Filtrar por Nombre"
+                onChange={(e) => {
+                  setFilterField("name");
+                  setFilter(e.target.value);
+                }}
+              />
+            </TableHead>
+            <TableHead>
+              <Input
+                placeholder="Filtrar por Estado"
+                onChange={(e) => {
+                  setFilterField("status");
+                  setFilter(e.target.value);
+                }}
+              />
+            </TableHead>
+            <TableHead>
+              <Input
+                placeholder="Filtrar por Especie"
+                onChange={(e) => {
+                  setFilterField("species");
+                  setFilter(e.target.value);
+                }}
+              />
+            </TableHead>
+            <TableHead>
+              <Input
+                placeholder="Filtrar por Tipo"
+                onChange={(e) => {
+                  setFilterField("type");
+                  setFilter(e.target.value);
+                }}
+              />
+            </TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
         </TableHeader>

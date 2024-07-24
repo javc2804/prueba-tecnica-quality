@@ -80,28 +80,28 @@ const AddCharacterForm: React.FC = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Nombre"
-        className="border border-gray-300 p-2 rounded-md"
+        className="border border-green-300 p-2 rounded-md"
       />
       <Input
         type="text"
         value={status}
         onChange={(e) => setStatus(e.target.value)}
         placeholder="Estado"
-        className="border border-gray-300 p-2 rounded-md"
+        className="border border-green-300 p-2 rounded-md"
       />
       <Input
         type="text"
         value={species}
         onChange={(e) => setSpecies(e.target.value)}
         placeholder="Especie"
-        className="border border-gray-300 p-2 rounded-md"
+        className="border border-green-300 p-2 rounded-md"
       />
       <Input
         type="text"
         value={type}
         onChange={(e) => setType(e.target.value)}
         placeholder="Tipo"
-        className="border border-gray-300 p-2 rounded-md"
+        className="border border-green-300 p-2 rounded-md"
       />
       <button
         type="submit"
