@@ -28,10 +28,12 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
   const [filters, setFilters] = useState<Record<keyof Character, string>>(
     {} as Record<keyof Character, string>
   );
-  const charactersPerPage = 10;
+  const charactersPerPage = 20;
 
-  const combinedCharacters = [...localCharacters, ...apiCharacters];
-
+  const combinedCharacters = [
+    ...localCharacters,
+    ...(Array.isArray(apiCharacters) ? apiCharacters : []),
+  ];
   const filteredCharacters = combinedCharacters.filter((character) =>
     Object.entries(filters).every(([field, value]) => {
       const key = field as keyof Character;
@@ -126,13 +128,13 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           ))}
         </TableBody>
       </Table>
-      <div>
+      {/* <div>
         {Array.from({ length: totalPages }, (_, index) => (
           <button key={index} onClick={() => setCurrentPage(index + 1)}>
             {index + 1}
           </button>
         ))}
-      </div>
+      </div> */}
     </>
   );
 };

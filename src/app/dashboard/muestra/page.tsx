@@ -4,7 +4,6 @@ import { Character } from "../../../types/types";
 import AddCharacterForm from "@/components/AddCharacterForm/AddCharacterForm";
 import CharactersTable from "@/components/CharactersTable/CharactersTable";
 import Pagination from "@/components/Pagination/Pagination";
-import { useCharacterStore } from "@/stores/store";
 
 const Home: React.FC = () => {
   const [apiCharacters, setApiCharacters] = useState<Character[]>([]);
@@ -17,10 +16,12 @@ const Home: React.FC = () => {
         `https://rickandmortyapi.com/api/character/?page=${page}`
       );
       const data = await response.json();
-      data.results.forEach((character: any) => {
-        useCharacterStore.getState().addCharacter(character);
-      });
-      setTotalPages(data.info.pages);
+      setApiCharacters(data.results);
+      if (data.info && data.info.pages) {
+        setTotalPages(data.info.pages);
+      } else {
+        setTotalPages(0);
+      }
     };
 
     fetchCharacters(currentPage);

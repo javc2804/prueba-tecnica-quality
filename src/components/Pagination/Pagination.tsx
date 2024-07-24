@@ -1,51 +1,71 @@
-// Pagination.tsx
 import React from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
-interface PaginationProps {
+interface PaginationsProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Paginations: React.FC<PaginationsProps> = ({
   currentPage,
   totalPages,
   onPageChange,
 }) => {
+  const getPageNumbers = () => {
+    if (totalPages <= 3) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const pages = [
+      1,
+      ...(currentPage > 2 ? ["..."] : []),
+      ...(currentPage > 1 && currentPage < totalPages ? [currentPage] : []),
+      ...(currentPage < totalPages - 1 ? ["..."] : []),
+      totalPages,
+    ];
+
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
+
   return (
-    <div>
-      <button onClick={() => onPageChange(1)} disabled={currentPage === 1}>
-        Primera
-      </button>
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Anterior
-      </button>
-      {Array.from({ length: totalPages }, (_, index) => (
-        <button
-          key={index}
-          disabled={currentPage === index + 1}
-          onClick={() => onPageChange(index + 1)}
-        >
-          {index + 1}
-        </button>
-      ))}
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Siguiente
-      </button>
-      <button
-        onClick={() => onPageChange(totalPages)}
-        disabled={currentPage === totalPages}
-      >
-        Última
-      </button>
-    </div>
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious onClick={() => onPageChange(currentPage - 1)} />
+        </PaginationItem>
+        {pageNumbers.map((page, index) =>
+          typeof page === "string" && page === "..." ? (
+            <PaginationItem key={index}>
+              <PaginationEllipsis />
+            </PaginationItem>
+          ) : (
+            <PaginationItem key={index}>
+              <PaginationLink
+                onClick={() => onPageChange(page as number)}
+                isActive={currentPage === page}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          )
+        )}
+        <PaginationItem>
+          <PaginationNext onClick={() => onPageChange(currentPage + 1)} />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 };
 
-export default Pagination;
+export default Paginations;
