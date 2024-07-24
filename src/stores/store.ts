@@ -8,6 +8,7 @@ interface CharacterState {
   updateCharacter: (character: Character) => void;
   editingCharacter: Character | null;
   setEditingCharacter: (character: Character | null) => void;
+  updateEpisode: (updatedCharacter: Character) => void;
 }
 
 export const useCharacterStore = create<CharacterState>((set) => ({
@@ -44,5 +45,11 @@ export const useCharacterStore = create<CharacterState>((set) => ({
   setEditingCharacter: (character: Character | null) =>
     set(() => ({
       editingCharacter: character,
+    })),
+  updateEpisode: (updatedCharacter) =>
+    set((state) => ({
+      characters: state.characters.map((character) =>
+        character.id === updatedCharacter.id ? updatedCharacter : character
+      ),
     })),
 }));
