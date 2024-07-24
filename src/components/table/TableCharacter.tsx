@@ -215,23 +215,6 @@ export function TableCharacter() {
 
   const [data, setData] = useState<Character[]>([]);
 
-  useEffect(() => {
-    const fetchCharacters = async () => {
-      setIsLoading(true);
-      try {
-        await useCharacterStore.getState().fetchAndSetCharacters(page);
-        const characters = useCharacterStore.getState().listCharacter;
-        console.log(characters);
-        setData(characters as Character[]);
-      } catch (error) {
-        console.error("Error al obtener los personajes:", error);
-      }
-      setIsLoading(false);
-    };
-
-    fetchCharacters();
-  }, [page]);
-
   const handlePreviousPage = () => {
     setPage((current) => Math.max(current - 1, 1));
   };
