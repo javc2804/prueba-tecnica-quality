@@ -221,6 +221,7 @@ export function TableCharacter() {
       try {
         await useCharacterStore.getState().fetchAndSetCharacters(page);
         const characters = useCharacterStore.getState().listCharacter;
+        console.log(characters);
         setData(characters as Character[]);
       } catch (error) {
         console.error("Error al obtener los personajes:", error);
