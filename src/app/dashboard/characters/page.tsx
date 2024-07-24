@@ -15,7 +15,10 @@ const Home: React.FC = () => {
         <AddCharacterForm />
       </div>
       <div className="md:w-3/5 w-full">
-        <CharactersTable apiCharacters={apiCharacters} />
+        <CharactersTable
+          apiCharacters={apiCharacters}
+          totalPagess={totalPages}
+        />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
