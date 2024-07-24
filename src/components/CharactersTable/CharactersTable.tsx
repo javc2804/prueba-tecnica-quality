@@ -12,15 +12,21 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const charactersPerPage = 10;
 
-  const combinedCharacters = [...localCharacters, ...apiCharacters];
+  const combinedAndSortedCharacters = [
+    ...localCharacters,
+    ...apiCharacters,
+  ].sort((a, b) => a.id - b.id);
+
   const indexOfLastCharacter = currentPage * charactersPerPage;
   const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
-  const currentCharacters = combinedCharacters.slice(
+  const currentCharacters = combinedAndSortedCharacters.slice(
     indexOfFirstCharacter,
     indexOfLastCharacter
   );
 
-  const totalPages = Math.ceil(combinedCharacters.length / charactersPerPage);
+  const totalPages = Math.ceil(
+    combinedAndSortedCharacters.length / charactersPerPage
+  );
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
