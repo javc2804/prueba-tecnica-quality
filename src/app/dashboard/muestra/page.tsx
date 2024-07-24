@@ -1,18 +1,34 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Character } from "../../../types/types";
 import AddCharacterForm from "@/components/AddCharacterForm/AddCharacterForm";
 import CharactersTable from "@/components/CharactersTable/CharactersTable";
 import Pagination from "@/components/Pagination/Pagination";
-import useCharacters from "@/hooks/useCharacters";
+import { useCharacterStore } from "@/stores/store";
 
 const Home: React.FC = () => {
-  const { characters, currentPage, totalPages, error, handlePageChange } =
-    useCharacters();
+  const [apiCharacters, setApiCharacters] = useState<Character[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-  if (error) {
-    return <div>Error Consultando personajes: {error.message}</div>;
-  }
+  useEffect(() => {
+    const fetchCharacters = async (page: number) => {
+      const response = await fetch(
+        `https://rickandmortyapi.com/api/character/?page=${page}`
+      );
+      const data = await response.json();
+      data.results.forEach((character: any) => {
+        useCharacterStore.getState().addCharacter(character);
+      });
+      setTotalPages(data.info.pages);
+    };
+
+    fetchCharacters(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -20,7 +36,7 @@ const Home: React.FC = () => {
         <AddCharacterForm />
       </div>
       <div className="md:w-3/5 w-full">
-        <CharactersTable apiCharacters={characters} />
+        <CharactersTable apiCharacters={apiCharacters} />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
