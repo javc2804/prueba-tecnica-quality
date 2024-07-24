@@ -9,13 +9,22 @@ interface Props {
 
 const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
   const localCharacters = useCharacterStore((state) => state.characters);
+  const updateCharacter = useCharacterStore((state) => state.updateCharacter);
   const [currentPage, setCurrentPage] = useState(1);
   const charactersPerPage = 10;
+  const [editingCharacter, setEditingCharacter] = useState<number | null>(null);
+  const [characterEdits, setCharacterEdits] = useState<Character | null>(null);
 
   const combinedAndSortedCharacters = [
     ...localCharacters,
     ...apiCharacters,
   ].sort((a, b) => a.id - b.id);
+
+  useEffect(() => {
+    // Si el estado local de personajes cambia, no necesitamos hacer nada específico aquí.
+    // Este efecto es solo para demostrar cómo reaccionar a cambios.
+    // La actualización de la UI se maneja automáticamente por React.
+  }, [localCharacters]);
 
   const indexOfLastCharacter = currentPage * charactersPerPage;
   const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
@@ -28,7 +37,32 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     combinedAndSortedCharacters.length / charactersPerPage
   );
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const startEditing = (id: number) => {
+    const character = combinedAndSortedCharacters.find(
+      (character) => character.id === id
+    );
+    if (character) {
+      setEditingCharacter(id);
+      setCharacterEdits({ ...character });
+    }
+  };
+
+  const handleEditChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof Character
+  ) => {
+    if (characterEdits) {
+      setCharacterEdits({ ...characterEdits, [field]: e.target.value });
+    }
+  };
+
+  const saveEdits = () => {
+    if (editingCharacter && characterEdits) {
+      updateCharacter(characterEdits);
+      setEditingCharacter(null);
+      setCharacterEdits(null);
+    }
+  };
 
   return (
     <div>
@@ -37,20 +71,40 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentCharacters.map((character) => (
             <tr key={character.id}>
               <td>{character.id}</td>
-              <td>{character.name}</td>
+              <td>
+                {editingCharacter === character.id ? (
+                  <input
+                    type="text"
+                    value={characterEdits?.name || ""}
+                    onChange={(e) => handleEditChange(e, "name")}
+                  />
+                ) : (
+                  character.name
+                )}
+              </td>
+              <td>
+                {editingCharacter === character.id ? (
+                  <button onClick={saveEdits}>Save</button>
+                ) : (
+                  <button onClick={() => startEditing(character.id)}>
+                    Edit
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div>
         {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index} onClick={() => paginate(index + 1)}>
+          <button key={index} onClick={() => setCurrentPage(index + 1)}>
             {index + 1}
           </button>
         ))}
