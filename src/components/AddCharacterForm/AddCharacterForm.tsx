@@ -1,25 +1,34 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character } from "../../types/types";
 
 const AddCharacterForm: React.FC = () => {
+  const editingCharacter = useCharacterStore((state) => state.editingCharacter);
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
   const addCharacter = useCharacterStore((state) => state.addCharacter);
+  const updateCharacter = useCharacterStore((state) => state.updateCharacter);
+  const setEditingCharacter = useCharacterStore(
+    (state) => state.setEditingCharacter
+  );
+
+  useEffect(() => {
+    if (editingCharacter) {
+      setName(editingCharacter.name);
+      setStatus(editingCharacter.status);
+    }
+  }, [editingCharacter]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newCharacter: Character = {
-      id: Date.now(),
-      name,
-      status,
-      local: true,
-    };
-    addCharacter(newCharacter);
+    if (editingCharacter) {
+      updateCharacter({ ...editingCharacter, name, status });
+    } else {
+      addCharacter({ id: Date.now(), name, status, local: true });
+    }
     setName("");
     setStatus("");
+    setEditingCharacter(null);
   };
 
   return (
@@ -36,7 +45,7 @@ const AddCharacterForm: React.FC = () => {
         onChange={(e) => setStatus(e.target.value)}
         placeholder="Estado"
       />
-      <button type="submit">Add Character</button>
+      <button type="submit">Save Character</button>
     </form>
   );
 };

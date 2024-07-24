@@ -6,6 +6,8 @@ interface CharacterState {
   version: number;
   addCharacter: (character: Character) => void;
   updateCharacter: (character: Character) => void;
+  editingCharacter: Character | null;
+  setEditingCharacter: (character: Character | null) => void;
 }
 
 export const useCharacterStore = create<CharacterState>((set) => ({
@@ -17,16 +19,14 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         (char) => char.id === character.id
       );
       if (characterIndex === -1) {
-        const sortedCharacters = [...state.characters].sort(
-          (a, b) => a.id - b.id
-        );
         return {
-          characters: [character, ...sortedCharacters],
+          characters: [...state.characters, character],
           version: state.version + 1,
         };
       } else {
-        const updatedCharacters = [...state.characters];
-        updatedCharacters[characterIndex] = character;
+        const updatedCharacters = state.characters.map((char) =>
+          char.id === character.id ? character : char
+        );
         return {
           characters: updatedCharacters,
           version: state.version + 1,
@@ -39,5 +39,10 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         char.id === updatedCharacter.id ? updatedCharacter : char
       ),
       version: state.version + 1,
+    })),
+  editingCharacter: null,
+  setEditingCharacter: (character: Character | null) =>
+    set(() => ({
+      editingCharacter: character,
     })),
 }));

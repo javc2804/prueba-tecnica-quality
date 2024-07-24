@@ -1,5 +1,4 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character } from "../../types/types";
 
@@ -8,13 +7,20 @@ interface Props {
 }
 
 const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
-  const localCharacters = useCharacterStore((state) => state.characters);
-  console.log(localCharacters);
-  const updateCharacter = useCharacterStore((state) => state.updateCharacter);
+  const {
+    characters: localCharacters,
+    updateCharacter,
+    editingCharacter,
+    setEditingCharacter,
+  } = useCharacterStore((state) => ({
+    characters: state.characters,
+    updateCharacter: state.updateCharacter,
+    editingCharacter: state.editingCharacter,
+    setEditingCharacter: state.setEditingCharacter,
+  }));
+
   const [currentPage, setCurrentPage] = useState(1);
   const charactersPerPage = 10;
-  const [editingCharacter, setEditingCharacter] = useState<number | null>(null);
-  const [characterEdits, setCharacterEdits] = useState<Character | null>(null);
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
@@ -23,7 +29,6 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     if (!a.local && b.local) return 1;
     return a.id - b.id;
   });
-  useEffect(() => {}, [localCharacters]);
 
   const indexOfLastCharacter = currentPage * charactersPerPage;
   const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
@@ -36,13 +41,14 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     combinedAndSortedCharacters.length / charactersPerPage
   );
 
-  const startEditing = (id: number) => {
-    const character = combinedAndSortedCharacters.find(
-      (character) => character.id === id
-    );
-    if (character) {
-      setEditingCharacter(id);
-      setCharacterEdits({ ...character });
+  const startEditing = (character: Character) => {
+    setEditingCharacter(character);
+  };
+
+  const saveEdits = () => {
+    if (editingCharacter) {
+      updateCharacter(editingCharacter);
+      setEditingCharacter(null);
     }
   };
 
@@ -50,16 +56,8 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof Character
   ) => {
-    if (characterEdits) {
-      setCharacterEdits({ ...characterEdits, [field]: e.target.value });
-    }
-  };
-
-  const saveEdits = () => {
-    if (editingCharacter && characterEdits) {
-      updateCharacter(characterEdits);
-      setEditingCharacter(null);
-      setCharacterEdits(null);
+    if (editingCharacter) {
+      setEditingCharacter({ ...editingCharacter, [field]: e.target.value });
     }
   };
 
@@ -79,24 +77,26 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
             <tr key={character.id}>
               <td>{character.id}</td>
               <td>
-                {editingCharacter === character.id ? (
+                {editingCharacter?.id === character.id ? (
                   <input
                     type="text"
-                    value={characterEdits?.name || ""}
+                    value={editingCharacter.name}
                     onChange={(e) => handleEditChange(e, "name")}
                   />
                 ) : (
                   character.name
                 )}
               </td>
-              <td>{character.status}</td>
               <td>
-                {editingCharacter === character.id ? (
+                {editingCharacter?.id === character.id
+                  ? editingCharacter.status
+                  : character.status}
+              </td>
+              <td>
+                {editingCharacter?.id === character.id ? (
                   <button onClick={saveEdits}>Save</button>
                 ) : (
-                  <button onClick={() => startEditing(character.id)}>
-                    Edit
-                  </button>
+                  <button onClick={() => startEditing(character)}>Edit</button>
                 )}
               </td>
             </tr>
