@@ -85,6 +85,12 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
             </TableHead>
             <TableHead>
               <Input
+                placeholder="Filtrar por Genero"
+                onChange={(e) => handleFilterChange("gender", e.target.value)}
+              />
+            </TableHead>
+            <TableHead>
+              <Input
                 placeholder="Filtrar por Estado"
                 onChange={(e) => handleFilterChange("status", e.target.value)}
               />
@@ -109,11 +115,12 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
             <TableRow key={character.id}>
               <TableCell>{character.id}</TableCell>
               <TableCell>{character.name}</TableCell>
+              <TableCell>{character.gender}</TableCell>
               <TableCell>{character.status}</TableCell>
               <TableCell>{character.species}</TableCell>
               <TableCell>{character.type}</TableCell>
               <TableCell>
-                <Button onClick={() => startEditing(character)}>Edit</Button>
+                <Button onClick={() => startEditing(character)}>Editar</Button>
               </TableCell>
             </TableRow>
           ))}

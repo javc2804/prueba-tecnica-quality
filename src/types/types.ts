@@ -4,5 +4,6 @@ export interface Character {
   status: string;
   type: string;
   species: string;
+  gender: string;
   local: boolean;
 }

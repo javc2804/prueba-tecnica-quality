@@ -9,6 +9,7 @@ const AddCharacterForm: React.FC = () => {
 
   const editingCharacter = useCharacterStore((state) => state.editingCharacter);
   const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
   const [status, setStatus] = useState("");
   const [species, setSpecies] = useState("");
   const [type, setType] = useState("");
@@ -21,6 +22,7 @@ const AddCharacterForm: React.FC = () => {
   useEffect(() => {
     if (editingCharacter) {
       setName(editingCharacter.name);
+      setGender(editingCharacter.gender);
       setStatus(editingCharacter.status);
       setSpecies(editingCharacter.species || "");
       setType(editingCharacter.type || "");
@@ -32,6 +34,7 @@ const AddCharacterForm: React.FC = () => {
 
     const characterData = {
       name,
+      gender,
       status,
       species,
       type,
@@ -64,6 +67,7 @@ const AddCharacterForm: React.FC = () => {
     }
 
     setName("");
+    setGender("");
     setStatus("");
     setSpecies("");
     setType("");
@@ -80,6 +84,13 @@ const AddCharacterForm: React.FC = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Nombre"
+        className="border border-green-300 p-2 rounded-md"
+      />
+      <Input
+        type="text"
+        value={gender}
+        onChange={(e) => setGender(e.target.value)}
+        placeholder="Genero"
         className="border border-green-300 p-2 rounded-md"
       />
       <Input
