@@ -6,18 +6,20 @@ import { Character } from "../../types/types";
 
 const AddCharacterForm: React.FC = () => {
   const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
   const addCharacter = useCharacterStore((state) => state.addCharacter);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const newCharacter: Character = {
-      id: Date.now(), // Simplicidad: usar timestamp como ID
+      id: Date.now(),
       name,
+      status,
       local: true,
-      status: "Alive",
     };
     addCharacter(newCharacter);
-    setName(""); // Resetear el campo después de agregar
+    setName("");
+    setStatus("");
   };
 
   return (
@@ -27,6 +29,12 @@ const AddCharacterForm: React.FC = () => {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Character Name"
+      />
+      <input
+        type="text"
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        placeholder="Estado"
       />
       <button type="submit">Add Character</button>
     </form>
