@@ -16,3 +16,8 @@ export const fetchData = async (path = "", options = { page: 1 }) => {
     throw error;
   }
 };
+
+export const fetchCharacters = async (page: number) => {
+  const data = await fetchData("character", { page });
+  return data;
+};
