@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCharacterStore } from "../../stores/store";
-import { Character } from "../../types/types";
+import { Character, Episode } from "../../types/types";
 
 import {
   Table,
@@ -15,10 +15,15 @@ import { Input } from "../ui/input";
 
 interface Props {
   apiCharacters: Character[];
+  apiEpisodes: Episode[];
   totalPagess: number;
 }
 
-const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
+const EpisodesTable: React.FC<Props> = ({
+  apiCharacters,
+  apiEpisodes,
+  totalPagess,
+}) => {
   const {
     characters: localCharacters,
     setEditingCharacter,
@@ -72,7 +77,10 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
     }));
   };
 
-  const handleFieldChange = (field: keyof Character, value: string) => {
+  const handleFieldChange = (
+    field: keyof Character | keyof Episode,
+    value: string
+  ) => {
     if (editingCharacter) {
       setEditingCharacterState({
         ...editingCharacter,
@@ -108,28 +116,12 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
             </TableHead>
             <TableHead>
               <Input
-                placeholder="Filtrar por Genero"
+                placeholder="Filtrar por Episode"
                 onChange={(e) => handleFilterChange("gender", e.target.value)}
               />
             </TableHead>
-            <TableHead>
-              <Input
-                placeholder="Filtrar por Estado"
-                onChange={(e) => handleFilterChange("status", e.target.value)}
-              />
-            </TableHead>
-            <TableHead>
-              <Input
-                placeholder="Filtrar por Especie"
-                onChange={(e) => handleFilterChange("species", e.target.value)}
-              />
-            </TableHead>
-            <TableHead>
-              <Input
-                placeholder="Filtrar por Tipo"
-                onChange={(e) => handleFilterChange("type", e.target.value)}
-              />
-            </TableHead>
+
+            <TableHead>Air Date</TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -147,10 +139,30 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
                   character.name
                 )}
               </TableCell>
-              <TableCell>{character.gender}</TableCell>
-              <TableCell>{character.status}</TableCell>
-              <TableCell>{character.species}</TableCell>
-              <TableCell>{character.type}</TableCell>
+              <TableCell>
+                {editingCharacter?.id === character.id ? (
+                  <Input
+                    value={editingCharacter.episode}
+                    onChange={(e) =>
+                      handleFieldChange("episode", e.target.value)
+                    }
+                  />
+                ) : (
+                  character.episode
+                )}
+              </TableCell>
+              <TableCell>
+                {editingCharacter?.id === character.id ? (
+                  <Input
+                    value={editingCharacter.air_date}
+                    onChange={(e) =>
+                      handleFieldChange("air_date", e.target.value)
+                    }
+                  />
+                ) : (
+                  character.air_date
+                )}
+              </TableCell>
               <TableCell>
                 {editingCharacter?.id === character.id ? (
                   <Button onClick={saveChanges}>Guardar</Button>
