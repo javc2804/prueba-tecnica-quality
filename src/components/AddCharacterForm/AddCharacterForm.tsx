@@ -13,6 +13,7 @@ const AddCharacterForm: React.FC = () => {
     const newCharacter: Character = {
       id: Date.now(), // Simplicidad: usar timestamp como ID
       name,
+      local: true,
     };
     addCharacter(newCharacter);
     setName(""); // Resetear el campo después de agregar

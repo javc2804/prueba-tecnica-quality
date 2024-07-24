@@ -9,22 +9,21 @@ interface Props {
 
 const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
   const localCharacters = useCharacterStore((state) => state.characters);
+  console.log(localCharacters);
   const updateCharacter = useCharacterStore((state) => state.updateCharacter);
   const [currentPage, setCurrentPage] = useState(1);
   const charactersPerPage = 10;
   const [editingCharacter, setEditingCharacter] = useState<number | null>(null);
   const [characterEdits, setCharacterEdits] = useState<Character | null>(null);
 
-  const combinedAndSortedCharacters = [
-    ...localCharacters,
-    ...apiCharacters,
-  ].sort((a, b) => a.id - b.id);
+  const combinedCharacters = [...localCharacters, ...apiCharacters];
 
-  useEffect(() => {
-    // Si el estado local de personajes cambia, no necesitamos hacer nada específico aquí.
-    // Este efecto es solo para demostrar cómo reaccionar a cambios.
-    // La actualización de la UI se maneja automáticamente por React.
-  }, [localCharacters]);
+  const combinedAndSortedCharacters = combinedCharacters.sort((a, b) => {
+    if (a.local && !b.local) return -1;
+    if (!a.local && b.local) return 1;
+    return a.id - b.id;
+  });
+  useEffect(() => {}, [localCharacters]);
 
   const indexOfLastCharacter = currentPage * charactersPerPage;
   const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;

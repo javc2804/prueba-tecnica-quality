@@ -17,8 +17,11 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         (char) => char.id === character.id
       );
       if (characterIndex === -1) {
+        const sortedCharacters = [...state.characters].sort(
+          (a, b) => a.id - b.id
+        );
         return {
-          characters: [...state.characters, character],
+          characters: [character, ...sortedCharacters],
           version: state.version + 1,
         };
       } else {
