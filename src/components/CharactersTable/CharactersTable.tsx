@@ -70,6 +70,7 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Estado</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -88,6 +89,7 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
                   character.name
                 )}
               </td>
+              <td>{character.status}</td>
               <td>
                 {editingCharacter === character.id ? (
                   <button onClick={saveEdits}>Save</button>
