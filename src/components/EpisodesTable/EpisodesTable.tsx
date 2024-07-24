@@ -15,15 +15,10 @@ import { Input } from "../ui/input";
 
 interface Props {
   apiCharacters: Character[];
-  apiEpisodes: Episode[];
   totalPagess: number;
 }
 
-const EpisodesTable: React.FC<Props> = ({
-  apiCharacters,
-  apiEpisodes,
-  totalPagess,
-}) => {
+const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
   const {
     characters: localCharacters,
     setEditingCharacter,
