@@ -17,10 +17,15 @@ const Home: React.FC = () => {
         `https://rickandmortyapi.com/api/character/?page=${page}`
       );
       const data = await response.json();
+      setApiCharacters(data.results);
       data.results.forEach((character: any) => {
         useCharacterStore.getState().addCharacter(character);
       });
-      setTotalPages(data.info.pages);
+      if (data.info && data.info.pages) {
+        setTotalPages(data.info.pages);
+      } else {
+        setTotalPages(0);
+      }
     };
 
     fetchCharacters(currentPage);

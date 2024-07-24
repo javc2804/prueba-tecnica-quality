@@ -1,71 +1,69 @@
 import React from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 
-interface PaginationsProps {
+interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
 }
 
-const Paginations: React.FC<PaginationsProps> = ({
+const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
 }) => {
-  const getPageNumbers = () => {
-    if (totalPages <= 3) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
+  const pageNumbers = [];
+  const maxPagesToShow = 5;
+  const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
 
-    const pages = [
-      1,
-      ...(currentPage > 2 ? ["..."] : []),
-      ...(currentPage > 1 && currentPage < totalPages ? [currentPage] : []),
-      ...(currentPage < totalPages - 1 ? ["..."] : []),
-      totalPages,
-    ];
+  let startPage = Math.max(1, currentPage - halfMaxPagesToShow);
+  let endPage = Math.min(totalPages, currentPage + halfMaxPagesToShow);
 
-    return pages;
-  };
+  if (currentPage - halfMaxPagesToShow <= 0) {
+    endPage = Math.min(totalPages, maxPagesToShow);
+  }
 
-  const pageNumbers = getPageNumbers();
+  if (currentPage + halfMaxPagesToShow > totalPages) {
+    startPage = Math.max(1, totalPages - maxPagesToShow + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
-    <Pagination>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={() => onPageChange(currentPage - 1)} />
-        </PaginationItem>
-        {pageNumbers.map((page, index) =>
-          typeof page === "string" && page === "..." ? (
-            <PaginationItem key={index}>
-              <PaginationEllipsis />
-            </PaginationItem>
-          ) : (
-            <PaginationItem key={index}>
-              <PaginationLink
-                onClick={() => onPageChange(page as number)}
-                isActive={currentPage === page}
-              >
-                {page}
-              </PaginationLink>
-            </PaginationItem>
-          )
-        )}
-        <PaginationItem>
-          <PaginationNext onClick={() => onPageChange(currentPage + 1)} />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+    <div>
+      <button onClick={() => onPageChange(1)} disabled={currentPage === 1}>
+        Primera
+      </button>
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        Anterior
+      </button>
+      {pageNumbers.map((page) => (
+        <button
+          key={page}
+          disabled={currentPage === page}
+          onClick={() => onPageChange(page)}
+        >
+          {page}
+        </button>
+      ))}
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        Siguiente
+      </button>
+      <button
+        onClick={() => onPageChange(totalPages)}
+        disabled={currentPage === totalPages}
+      >
+        Última
+      </button>
+    </div>
   );
 };
 
-export default Paginations;
+export default Pagination;

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character } from "../../types/types";
-
 import {
   Table,
   TableBody,
@@ -24,16 +23,20 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
       setEditingCharacter: state.setEditingCharacter,
     }));
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<Record<keyof Character, string>>(
     {} as Record<keyof Character, string>
   );
-  const charactersPerPage = 20;
 
-  const combinedCharacters = [
-    ...localCharacters,
-    ...(Array.isArray(apiCharacters) ? apiCharacters : []),
-  ];
+  // Combine and deduplicate characters
+  const combinedCharacters = Array.from(
+    new Map(
+      [...localCharacters, ...apiCharacters].map((character) => [
+        character.id,
+        character,
+      ])
+    ).values()
+  );
+
   const filteredCharacters = combinedCharacters.filter((character) =>
     Object.entries(filters).every(([field, value]) => {
       const key = field as keyof Character;
@@ -47,15 +50,6 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
     if (!a.local && b.local) return 1;
     return a.id - b.id;
   });
-
-  const indexOfLastCharacter = currentPage * charactersPerPage;
-  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
-  const currentCharacters = combinedAndSortedCharacters.slice(
-    indexOfFirstCharacter,
-    indexOfLastCharacter
-  );
-
-  const totalPages = Math.ceil(filteredCharacters.length / charactersPerPage);
 
   const startEditing = (character: Character) => {
     setEditingCharacter(character);
@@ -113,8 +107,8 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentCharacters.map((character) => (
-            <TableRow key={character.id}>
+          {combinedAndSortedCharacters.map((character) => (
+            <TableRow key={`${character.id}-${character.name}`}>
               <TableCell>{character.id}</TableCell>
               <TableCell>{character.name}</TableCell>
               <TableCell>{character.gender}</TableCell>
@@ -128,13 +122,6 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters }) => {
           ))}
         </TableBody>
       </Table>
-      {/* <div>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button key={index} onClick={() => setCurrentPage(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
-      </div> */}
     </>
   );
 };
