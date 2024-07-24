@@ -17,16 +17,13 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         (char) => char.id === character.id
       );
       if (characterIndex === -1) {
-        // Character does not exist, add new character
         return {
           characters: [...state.characters, character],
           version: state.version + 1,
         };
       } else {
-        // Character already exists, update the character
-
         const updatedCharacters = [...state.characters];
-        updatedCharacters[characterIndex] = character; // Update the character at the found index
+        updatedCharacters[characterIndex] = character;
         return {
           characters: updatedCharacters,
           version: state.version + 1,
