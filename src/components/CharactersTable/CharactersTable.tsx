@@ -12,25 +12,33 @@ import {
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import Pagination from "@/components/Pagination/Pagination";
 
 interface Props {
   apiCharacters: Character[];
   totalPagess: number;
+  onPageChange: any;
+  currentPage: any;
 }
 
-const CharactersTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
+const CharactersTable: React.FC<Props> = ({
+  apiCharacters,
+  totalPagess,
+  onPageChange,
+  currentPage,
+}) => {
   const { characters: localCharacters, setEditingCharacter } =
     useCharacterStore((state) => ({
       characters: state.characters,
       setEditingCharacter: state.setEditingCharacter,
     }));
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<Record<keyof Character, string>>(
     {} as Record<keyof Character, string>
   );
-  const charactersPerPage = 10;
+  const charactersPerPage = 20;
 
+  console.log(apiCharacters);
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
   const filteredCharacters = combinedCharacters.filter((character) =>
@@ -53,6 +61,8 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
     indexOfFirstCharacter,
     indexOfLastCharacter
   );
+
+  // console.log(currentCharacters);
 
   // const totalPages = Math.ceil(filteredCharacters.length / charactersPerPage);
 
@@ -127,13 +137,23 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
           ))}
         </TableBody>
       </Table>
-      <div>
+      {/* <div>
+        {currentPage} <br />
         {Array.from({ length: totalPagess }, (_, index) => (
-          <button key={index} onClick={() => setCurrentPage(index + 1)}>
+          <button
+            key={index}
+            disabled={currentPage === index + 1}
+            onClick={() => onPageChange(index + 1)}
+          >
             {index + 1}
           </button>
         ))}
-      </div>
+      </div> */}
+      <Pagination
+        totalPages={totalPagess}
+        onPageChange={onPageChange}
+        currentPage={currentPage}
+      />
     </>
   );
 };

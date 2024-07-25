@@ -2,7 +2,6 @@
 import React from "react";
 import AddCharacterForm from "@/components/AddCharacterForm/AddCharacterForm";
 import CharactersTable from "@/components/CharactersTable/CharactersTable";
-import Pagination from "@/components/Pagination/Pagination";
 import useCharacters from "@/hooks/useCharacters";
 import Loading from "@/components/Loading/Loading";
 
@@ -25,11 +24,8 @@ const Home: React.FC = () => {
             <CharactersTable
               apiCharacters={apiCharacters}
               totalPagess={totalPages}
-            />
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
               onPageChange={handlePageChange}
+              currentPage={currentPage}
             />
           </div>
         </>

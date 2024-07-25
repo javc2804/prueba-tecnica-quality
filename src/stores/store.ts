@@ -28,6 +28,7 @@ export const useCharacterStore = create<CharacterState>((set) => ({
         const updatedCharacters = state.characters.map((char) =>
           char.id === character.id ? character : char
         );
+
         return {
           characters: updatedCharacters,
           version: state.version + 1,

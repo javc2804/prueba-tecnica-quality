@@ -18,6 +18,8 @@ const useCharacters = () => {
 
       try {
         const data = await fetchCharacters(page, "character");
+        // setApiCharacters(data.results);
+
         data.results.forEach((character: Character) => {
           useCharacterStore.getState().addCharacter(character);
         });
@@ -35,6 +37,7 @@ const useCharacters = () => {
   }, [currentPage]);
 
   const handlePageChange = (page: number) => {
+    console.log(page);
     setCurrentPage(page);
   };
 
