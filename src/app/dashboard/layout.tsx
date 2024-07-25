@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
-
+import { useState } from "react";
 const links = [
   { name: "Gestionar personajes", href: "characters" },
   { name: "Gestionar episodios", href: "episodes" },
@@ -60,9 +60,7 @@ export default function DashboardLayout({
                 href="#"
                 className="text-xl font-bold flex items-center lg:ml-2.5"
               >
-                <span className="self-center whitespace-nowrap ml-2">
-                  Rick And Morty
-                </span>
+                <Image src="/logo.png" alt="Logo" width={200} height={120} />
               </a>
             </div>
             <div className="flex items-center">
