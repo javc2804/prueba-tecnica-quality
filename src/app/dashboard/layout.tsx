@@ -4,9 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
 import { useState } from "react";
+import { FaUser, FaTv } from "react-icons/fa";
+
 const links = [
-  { name: "Gestionar personajes", href: "characters" },
-  { name: "Gestionar episodios", href: "episodes" },
+  { name: "Gestionar personajes", href: "characters", icon: <FaUser /> },
+  { name: "Gestionar episodios", href: "episodes", icon: <FaTv /> },
 ];
 
 export default function DashboardLayout({
@@ -92,6 +94,7 @@ export default function DashboardLayout({
                         href={link.href}
                         className="text-base capitalize text-gray-900 font-normal rounded-lg flex items-center p-2 hover:text-neon-green hover:bg-gray-100 group"
                       >
+                        {link.icon} {/* Renderiza el icono aquí */}
                         <span className="ml-3">{link.name}</span>
                       </Link>
                     </li>
@@ -120,7 +123,7 @@ export default function DashboardLayout({
             </div>
           </main>
           <p className="text-center text-sm text-gray-500 my-10">
-            &copy; {new Date().getFullYear()}{" "}
+            &copy; {new Date().getFullYear()}
             <a href="#" className="hover:underline" target="_blank">
               Rick and Morty
             </a>

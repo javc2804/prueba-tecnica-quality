@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import useLogin from "@/hooks/useLogin";
@@ -30,6 +31,9 @@ const LoginPage = () => {
           <div className="px-16 py-16 mt-4 text-left bg-white shadow-lg w-full max-w-md">
             <h3 className="text-3xl font-bold text-center">Inicia Sesión</h3>
 
+            <div className="flex justify-center mb-4">
+              <Image src="/logo.png" alt="Logo" width={200} height={120} />
+            </div>
             <form onSubmit={handleSubmit}>
               <div className="mt-4">
                 <div>
