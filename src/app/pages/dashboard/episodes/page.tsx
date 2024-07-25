@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import useEpisodes from "@/hooks/useEpisodes";
+import useEpisodes from "../../../../hooks/episodes/useEpisodes";
 import EpisodesTable from "@/components/EpisodesTable/EpisodesTable";
 import Loading from "@/components/Loading/Loading";
 import ProtectedRoute from "@/components/ProtectedRoute";

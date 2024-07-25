@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Character, Episode } from "@/types/types";
 import { useCharacterStore } from "@/stores/store";
-import { fetchCharacters } from "../services/api";
+import { fetchCharacters } from "../../services/api";
 import { useToast } from "@/components/ui/use-toast";
 
 const useEpisodes = () => {
