@@ -86,7 +86,7 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
             </TableHead>
             <TableHead>
               <Input
-                placeholder="Filtrar por Genero"
+                placeholder="Filtrar por Género"
                 onChange={(e) => handleFilterChange("gender", e.target.value)}
               />
             </TableHead>

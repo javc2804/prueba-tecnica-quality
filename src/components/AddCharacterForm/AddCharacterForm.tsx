@@ -92,7 +92,7 @@ const AddCharacterForm: React.FC = () => {
         type="text"
         value={gender}
         onChange={(e) => setGender(e.target.value)}
-        placeholder="Genero"
+        placeholder="Género"
         className="border border-green-300 p-2 rounded-md"
       />
       <Input
