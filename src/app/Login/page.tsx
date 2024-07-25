@@ -12,7 +12,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    router.push("/dashboard/home/");
+    router.push("/dashboard/characters");
   };
   return (
     <>
