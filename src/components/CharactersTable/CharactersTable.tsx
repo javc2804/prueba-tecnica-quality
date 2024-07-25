@@ -62,10 +62,6 @@ const CharactersTable: React.FC<Props> = ({
     indexOfLastCharacter
   );
 
-  // console.log(currentCharacters);
-
-  // const totalPages = Math.ceil(filteredCharacters.length / charactersPerPage);
-
   const startEditing = (character: Character) => {
     setEditingCharacter(character);
   };
@@ -137,18 +133,6 @@ const CharactersTable: React.FC<Props> = ({
           ))}
         </TableBody>
       </Table>
-      {/* <div>
-        {currentPage} <br />
-        {Array.from({ length: totalPagess }, (_, index) => (
-          <button
-            key={index}
-            disabled={currentPage === index + 1}
-            onClick={() => onPageChange(index + 1)}
-          >
-            {index + 1}
-          </button>
-        ))}
-      </div> */}
       <Pagination
         totalPages={totalPagess}
         onPageChange={onPageChange}
