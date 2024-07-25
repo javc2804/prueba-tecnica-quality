@@ -26,7 +26,7 @@ export default function DashboardLayout({
                 id="toggleSidebarMobile"
                 aria-expanded={isSidebarOpen ? "true" : "false"}
                 aria-controls="sidebar"
-                className="lg:hidden mr-2 text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+                className="lg:hidden mr-2 text-gray-600 hover:text-neon-green cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               >
                 <svg
@@ -68,7 +68,7 @@ export default function DashboardLayout({
             <div className="flex items-center">
               <Link
                 href="/Login"
-                className="text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+                className="text-gray-600 hover:text-neon-green cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
               >
                 Cerrar sesión
               </Link>
@@ -92,7 +92,7 @@ export default function DashboardLayout({
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-base capitalize text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
+                        className="text-base capitalize text-gray-900 font-normal rounded-lg flex items-center p-2 hover:text-neon-green hover:bg-gray-100 group"
                       >
                         <span className="ml-3">{link.name}</span>
                       </Link>

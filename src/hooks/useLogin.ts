@@ -8,13 +8,11 @@ const useLogin = () => {
     {}
   );
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    };
+  const handleLogin = async (
+    data: { email: string; password: string },
+    setLoading: (loading: boolean) => void
+  ) => {
+    setLoading(true);
 
     const result = loginSchema.safeParse(data);
     if (!result.success) {
@@ -23,10 +21,17 @@ const useLogin = () => {
         email: fieldErrors.email?.[0],
         password: fieldErrors.password?.[0],
       });
+      setTimeout(() => {
+        setLoading(false);
+        console.log("Validation failed, setting isLoading to false");
+      }, 1000);
       return;
     }
 
     router.push("/dashboard/characters");
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   return {
