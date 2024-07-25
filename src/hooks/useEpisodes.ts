@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import { Character } from "@/types/types";
 import { useCharacterStore } from "@/stores/store";
 import { fetchCharacters } from "../services/api";
+import { useToast } from "@/components/ui/use-toast";
 
 const useEpisodes = () => {
+  const { toast } = useToast();
+
   const [apiCharacters, setApiCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -19,7 +22,11 @@ const useEpisodes = () => {
         });
         setTotalPages(data.info.pages);
       } catch (error) {
-        console.error("Error fetching characters:", error);
+        // console.error("Error fetching episodios:", error);
+        toast({
+          title: "Error",
+          description: "Error al obtener los episodios",
+        });
       } finally {
         setLoading(false);
       }
