@@ -113,7 +113,7 @@ const CharactersTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
         </TableHeader>
         <TableBody>
           {currentCharacters.map((character) => (
-            <TableRow key={character.id}>
+            <TableRow key={character.id + Math.random()}>
               <TableCell>{character.id}</TableCell>
               <TableCell>{character.name}</TableCell>
               <TableCell>{character.gender}</TableCell>

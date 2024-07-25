@@ -7,9 +7,12 @@ const useCharacters = () => {
   const [apiCharacters, setApiCharacters] = useState<Character[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getCharacters = async (page: number) => {
+      setLoading(true);
+
       try {
         const data = await fetchCharacters(page, "character");
         data.results.forEach((character: Character) => {
@@ -19,6 +22,7 @@ const useCharacters = () => {
       } catch (error) {
         console.error("Error fetching characters:", error);
       }
+      setLoading(false);
     };
 
     getCharacters(currentPage);
@@ -33,6 +37,7 @@ const useCharacters = () => {
     currentPage,
     totalPages,
     handlePageChange,
+    loading,
   };
 };
 
