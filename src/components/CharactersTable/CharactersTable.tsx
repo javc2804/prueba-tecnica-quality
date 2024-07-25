@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character } from "../../types/types";
