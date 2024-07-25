@@ -7,7 +7,6 @@ export interface Character {
   gender: string;
   episode: string;
   air_date: string;
-
   local: boolean;
 }
 

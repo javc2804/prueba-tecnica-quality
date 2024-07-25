@@ -3,20 +3,20 @@ import { Character, Episode } from "../../types/types";
 import { useCharacterStore } from "../../stores/store";
 
 const useEpisodesFilters = (apiCharacters: Character[]) => {
-  const {
-    characters: localCharacters,
-    setEditingCharacter,
-    updateEpisode,
-  } = useCharacterStore((state) => ({
-    characters: state.characters,
-    setEditingCharacter: state.setEditingCharacter,
-    updateEpisode: state.updateEpisode,
-  }));
+  const { characters: localCharacters, updateEpisode } = useCharacterStore(
+    (state) => ({
+      characters: state.characters,
+      setEditingCharacter: state.setEditingCharacter,
+      updateEpisode: state.updateEpisode,
+    })
+  );
 
-  const [filters, setFilters] = useState<Record<string, string>>({});
-
-  const [editingCharacter, setEditingCharacterState] =
-    useState<Character | null>(null);
+  const [filters, setFilters] = useState<Record<keyof Episode, string>>(
+    {} as Record<keyof Episode, string>
+  );
+  const [editingEpisode, setEditingCharacterState] = useState<Character | null>(
+    null
+  );
   const [editedField, setEditedField] = useState<string>("");
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
@@ -50,9 +50,9 @@ const useEpisodesFilters = (apiCharacters: Character[]) => {
     field: keyof Character | keyof Episode,
     value: string
   ) => {
-    if (editingCharacter) {
+    if (editingEpisode) {
       setEditingCharacterState({
-        ...editingCharacter,
+        ...editingEpisode,
         [field]: value,
       });
       setEditedField(field);
@@ -60,8 +60,8 @@ const useEpisodesFilters = (apiCharacters: Character[]) => {
   };
 
   const saveChanges = () => {
-    if (editingCharacter) {
-      updateEpisode(editingCharacter);
+    if (editingEpisode) {
+      updateEpisode(editingEpisode);
       setEditingCharacterState(null);
     }
   };
@@ -69,7 +69,7 @@ const useEpisodesFilters = (apiCharacters: Character[]) => {
   return {
     combinedAndSortedEpisode,
     filters,
-    editingCharacter,
+    editingEpisode,
     handleFilterChange,
     startEditing,
     handleFieldChange,

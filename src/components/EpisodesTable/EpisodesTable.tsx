@@ -1,5 +1,5 @@
 import React from "react";
-import { Character } from "../../types/types";
+import { Episode } from "../../types/types";
 import Pagination from "@/components/Pagination/Pagination";
 import {
   Table,
@@ -11,37 +11,36 @@ import {
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import useCharacterFilters from "../../hooks/episodes/useEpisodesFilters";
+import useEpisodesFilters from "../../hooks/episodes/useEpisodesFilters";
 
 interface Props {
-  apiCharacters: Character[];
+  apiEpisodes: any;
   totalPagess: number;
   onPageChange: any;
   currentPage: any;
 }
 
 const EpisodesTable: React.FC<Props> = ({
-  apiCharacters,
+  apiEpisodes,
   totalPagess,
   onPageChange,
   currentPage,
 }) => {
   const {
     combinedAndSortedEpisode,
-    filters,
-    editingCharacter,
+    editingEpisode,
     handleFilterChange,
     startEditing,
     handleFieldChange,
     saveChanges,
-  } = useCharacterFilters(apiCharacters);
+  } = useEpisodesFilters(apiEpisodes);
 
   const episodesPerPage = 20;
-  const indexOfLastCharacter = currentPage * episodesPerPage;
-  const indexOfFirstCharacter = indexOfLastCharacter - episodesPerPage;
+  const indexOfLastEpisode = currentPage * episodesPerPage;
+  const indexOfFirstEpisode = indexOfLastEpisode - episodesPerPage;
   const currentEpisode = combinedAndSortedEpisode.slice(
-    indexOfFirstCharacter,
-    indexOfLastCharacter
+    indexOfFirstEpisode,
+    indexOfLastEpisode
   );
 
   return (
@@ -67,7 +66,7 @@ const EpisodesTable: React.FC<Props> = ({
                 onChange={(e) => handleFilterChange("episode", e.target.value)}
               />
             </TableHead>
-            <TableHead>Air Date</TableHead>
+            <TableHead>Fecha de emisión</TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -76,9 +75,9 @@ const EpisodesTable: React.FC<Props> = ({
             <TableRow key={episode.id}>
               <TableCell>{episode.id}</TableCell>
               <TableCell>
-                {editingCharacter?.id === episode.id ? (
+                {editingEpisode?.id === episode.id ? (
                   <Input
-                    value={editingCharacter.name}
+                    value={editingEpisode.name}
                     onChange={(e) => handleFieldChange("name", e.target.value)}
                   />
                 ) : (
@@ -86,9 +85,9 @@ const EpisodesTable: React.FC<Props> = ({
                 )}
               </TableCell>
               <TableCell>
-                {editingCharacter?.id === episode.id ? (
+                {editingEpisode?.id === episode.id ? (
                   <Input
-                    value={editingCharacter.episode}
+                    value={editingEpisode.episode}
                     onChange={(e) =>
                       handleFieldChange("episode", e.target.value)
                     }
@@ -97,9 +96,11 @@ const EpisodesTable: React.FC<Props> = ({
                   episode.episode
                 )}
               </TableCell>
-              <TableCell>{episode.air_date}</TableCell>
               <TableCell>
-                {editingCharacter?.id === episode.id ? (
+                {new Date(episode.air_date).toLocaleDateString("es-ES")}
+              </TableCell>
+              <TableCell>
+                {editingEpisode?.id === episode.id ? (
                   <Button onClick={saveChanges}>Guardar</Button>
                 ) : (
                   <Button onClick={() => startEditing(episode)}>Editar</Button>

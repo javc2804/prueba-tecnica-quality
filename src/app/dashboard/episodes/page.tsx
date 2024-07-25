@@ -5,7 +5,7 @@ import EpisodesTable from "@/components/EpisodesTable/EpisodesTable";
 import Loading from "@/components/Loading/Loading";
 
 const Home: React.FC = () => {
-  const { apiCharacters, currentPage, totalPages, handlePageChange, loading } =
+  const { apiEpisodes, currentPage, totalPages, handlePageChange, loading } =
     useEpisodes();
 
   return (
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
       ) : (
         <div className="w-full">
           <EpisodesTable
-            apiCharacters={apiCharacters}
+            apiEpisodes={apiEpisodes}
             totalPagess={totalPages}
             onPageChange={handlePageChange}
             currentPage={currentPage}

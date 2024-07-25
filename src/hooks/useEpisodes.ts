@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Character } from "@/types/types";
+import { Character, Episode } from "@/types/types";
 import { useCharacterStore } from "@/stores/store";
 import { fetchCharacters } from "../services/api";
 import { useToast } from "@/components/ui/use-toast";
@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 const useEpisodes = () => {
   const { toast } = useToast();
 
-  const [apiCharacters, setApiCharacters] = useState<Character[]>([]);
+  const [apiEpisodes, setApiEpisodes] = useState<Episode[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,7 @@ const useEpisodes = () => {
   };
 
   return {
-    apiCharacters,
+    apiEpisodes,
     currentPage,
     totalPages,
     handlePageChange,
