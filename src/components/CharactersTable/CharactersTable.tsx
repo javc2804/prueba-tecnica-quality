@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character } from "../../types/types";
 
@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import Pagination from "@/components/Pagination/Pagination";
+import useCharacterFilter from "../../hooks/characters/useCharacterFilter";
 
 interface Props {
   apiCharacters: Character[];
@@ -35,44 +36,17 @@ const CharactersTable: React.FC<Props> = ({
       setEditingCharacter: state.setEditingCharacter,
     }));
 
-  const [filters, setFilters] = useState<Record<keyof Character, string>>(
-    {} as Record<keyof Character, string>
-  );
   const charactersPerPage = 20;
 
-  console.log(apiCharacters);
-  const combinedCharacters = [...localCharacters, ...apiCharacters];
-
-  const filteredCharacters = combinedCharacters.filter((character) =>
-    Object.entries(filters).every(([field, value]) => {
-      const key = field as keyof Character;
-      const fieldValue = character[key]?.toString().toLowerCase();
-      return fieldValue?.includes(value.toLowerCase());
-    })
-  );
-
-  const combinedAndSortedCharacters = filteredCharacters.sort((a, b) => {
-    if (a.local && !b.local) return -1;
-    if (!a.local && b.local) return 1;
-    return a.id - b.id;
-  });
-
-  const indexOfLastCharacter = currentPage * charactersPerPage;
-  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
-  const currentCharacters = combinedAndSortedCharacters.slice(
-    indexOfFirstCharacter,
-    indexOfLastCharacter
+  const { currentCharacters, handleFilterChange } = useCharacterFilter(
+    apiCharacters,
+    localCharacters,
+    charactersPerPage,
+    currentPage
   );
 
   const startEditing = (character: Character) => {
     setEditingCharacter(character);
-  };
-
-  const handleFilterChange = (field: keyof Character, value: string) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [field]: value,
-    }));
   };
 
   return (
