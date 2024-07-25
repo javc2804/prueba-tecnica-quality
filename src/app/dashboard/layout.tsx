@@ -65,6 +65,14 @@ export default function DashboardLayout({
                 </span>
               </a>
             </div>
+            <div className="flex items-center">
+              <Link
+                href="/Login"
+                className="text-gray-600 hover:text-gray-900 cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+              >
+                Cerrar sesión
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
