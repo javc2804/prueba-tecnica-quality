@@ -62,6 +62,8 @@ const AddCharacterForm: React.FC = () => {
         id: Date.now(),
         ...result.data,
         local: true,
+        episode: "",
+        air_date: "",
       });
       notify("Correcto", "Personaje creado correctamente");
     }
