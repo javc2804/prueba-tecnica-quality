@@ -28,7 +28,7 @@ const useLogin = () => {
       return;
     }
 
-    router.push("/dashboard/characters");
+    router.push("/pages/dashboard/characters");
     setTimeout(() => {
       setLoading(false);
     }, 1000);
