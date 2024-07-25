@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 const Home = () => {
-  redirect("/pages/Login");
+  redirect("/auth/Login");
   return null;
 };
 
