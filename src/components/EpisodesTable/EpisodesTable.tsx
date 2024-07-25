@@ -30,13 +30,14 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
   }));
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState<Record<keyof Character, string>>(
-    {} as Record<keyof Character, string>
+  const [filters, setFilters] = useState<Record<keyof Episode, string>>(
+    {} as Record<keyof Episode, string>
   );
-  const [editingCharacter, setEditingCharacterState] =
-    useState<Character | null>(null);
+  const [editingCharacter, setEditingCharacterState] = useState<Episode | null>(
+    null
+  );
   const [editedField, setEditedField] = useState<string>("");
-  const charactersPerPage = 10;
+  const episodesPerPage = 10;
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
@@ -48,20 +49,20 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
     })
   );
 
-  const combinedAndSortedCharacters = filteredCharacters.sort((a, b) => {
+  const combinedAndSortedEpisode = filteredCharacters.sort((a, b) => {
     if (a.local && !b.local) return -1;
     if (!a.local && b.local) return 1;
     return a.id - b.id;
   });
 
-  const indexOfLastCharacter = currentPage * charactersPerPage;
-  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
-  const currentCharacters = combinedAndSortedCharacters.slice(
+  const indexOfLastCharacter = currentPage * episodesPerPage;
+  const indexOfFirstCharacter = indexOfLastCharacter - episodesPerPage;
+  const currentEpisode = combinedAndSortedEpisode.slice(
     indexOfFirstCharacter,
     indexOfLastCharacter
   );
 
-  const startEditing = (character: Character) => {
+  const startEditing = (character: Episode) => {
     setEditingCharacterState(character);
   };
 
@@ -121,7 +122,7 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentCharacters.map((character) => (
+          {currentEpisode.map((character) => (
             <TableRow key={character.id}>
               <TableCell>{character.id}</TableCell>
               <TableCell>
