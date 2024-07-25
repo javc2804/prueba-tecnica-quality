@@ -33,9 +33,8 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
   const [filters, setFilters] = useState<Record<keyof Episode, string>>(
     {} as Record<keyof Episode, string>
   );
-  const [editingCharacter, setEditingCharacterState] = useState<Episode | null>(
-    null
-  );
+  const [editingCharacter, setEditingCharacterState] =
+    useState<Character | null>(null);
   const [editedField, setEditedField] = useState<string>("");
   const episodesPerPage = 10;
 
@@ -62,7 +61,7 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
     indexOfLastCharacter
   );
 
-  const startEditing = (character: Episode) => {
+  const startEditing = (character: Character) => {
     setEditingCharacterState(character);
   };
 
@@ -122,21 +121,21 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {currentEpisode.map((character) => (
-            <TableRow key={character.id}>
-              <TableCell>{character.id}</TableCell>
+          {currentEpisode.map((episode) => (
+            <TableRow key={episode.id}>
+              <TableCell>{episode.id}</TableCell>
               <TableCell>
-                {editingCharacter?.id === character.id ? (
+                {editingCharacter?.id === episode.id ? (
                   <Input
                     value={editingCharacter.name}
                     onChange={(e) => handleFieldChange("name", e.target.value)}
                   />
                 ) : (
-                  character.name
+                  episode.name
                 )}
               </TableCell>
               <TableCell>
-                {editingCharacter?.id === character.id ? (
+                {editingCharacter?.id === episode.id ? (
                   <Input
                     value={editingCharacter.episode}
                     onChange={(e) =>
@@ -144,28 +143,15 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
                     }
                   />
                 ) : (
-                  character.episode
+                  episode.episode
                 )}
               </TableCell>
+              <TableCell>{episode.air_date}</TableCell>
               <TableCell>
-                {editingCharacter?.id === character.id ? (
-                  <Input
-                    value={editingCharacter.air_date}
-                    onChange={(e) =>
-                      handleFieldChange("air_date", e.target.value)
-                    }
-                  />
-                ) : (
-                  character.air_date
-                )}
-              </TableCell>
-              <TableCell>
-                {editingCharacter?.id === character.id ? (
+                {editingCharacter?.id === episode.id ? (
                   <Button onClick={saveChanges}>Guardar</Button>
                 ) : (
-                  <Button onClick={() => startEditing(character)}>
-                    Editar
-                  </Button>
+                  <Button onClick={() => startEditing(episode)}>Editar</Button>
                 )}
               </TableCell>
             </TableRow>
