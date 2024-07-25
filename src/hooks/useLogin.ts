@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginSchema } from "@/models/loginSchema";
+import { useAuthStore } from "../stores/authStore";
 
 const useLogin = () => {
   const router = useRouter();
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
+  const { login } = useAuthStore();
 
   const handleLogin = async (
     data: { email: string; password: string },
@@ -28,6 +30,7 @@ const useLogin = () => {
       return;
     }
 
+    login();
     router.push("/pages/dashboard/characters");
     setTimeout(() => {
       setLoading(false);

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Toaster } from "@/components/ui/toaster";
 import { useState } from "react";
 import { FaUser, FaTv } from "react-icons/fa";
+import { useAuthStore } from "../../../stores/authStore";
 
 const links = [
   { name: "Gestionar personajes", href: "characters", icon: <FaUser /> },
@@ -16,6 +17,8 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const { logout } = useAuthStore();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -69,6 +72,7 @@ export default function DashboardLayout({
               <Link
                 href="/pages/Login"
                 className="text-gray-600 hover:text-neon-green cursor-pointer p-2 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100 rounded"
+                onClick={logout}
               >
                 Cerrar sesión
               </Link>
