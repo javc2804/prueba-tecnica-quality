@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Pagination from "@/components/Pagination/Pagination";
 import useEpisodes from "@/hooks/useEpisodes";
 import EpisodesTable from "@/components/EpisodesTable/EpisodesTable";
 import Loading from "@/components/Loading/Loading";
@@ -20,11 +19,8 @@ const Home: React.FC = () => {
           <EpisodesTable
             apiCharacters={apiCharacters}
             totalPagess={totalPages}
-          />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
             onPageChange={handlePageChange}
+            currentPage={currentPage}
           />
         </div>
       )}

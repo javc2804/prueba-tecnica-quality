@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useCharacterStore } from "../../stores/store";
 import { Character, Episode } from "../../types/types";
+import Pagination from "@/components/Pagination/Pagination";
 
 import {
   Table,
@@ -16,9 +17,16 @@ import { Input } from "../ui/input";
 interface Props {
   apiCharacters: Character[];
   totalPagess: number;
+  onPageChange: any;
+  currentPage: any;
 }
 
-const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
+const EpisodesTable: React.FC<Props> = ({
+  apiCharacters,
+  totalPagess,
+  onPageChange,
+  currentPage,
+}) => {
   const {
     characters: localCharacters,
     setEditingCharacter,
@@ -29,14 +37,13 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
     updateEpisode: state.updateEpisode,
   }));
 
-  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<Record<keyof Episode, string>>(
     {} as Record<keyof Episode, string>
   );
   const [editingCharacter, setEditingCharacterState] =
     useState<Character | null>(null);
   const [editedField, setEditedField] = useState<string>("");
-  const episodesPerPage = 10;
+  const episodesPerPage = 20;
 
   const combinedCharacters = [...localCharacters, ...apiCharacters];
 
@@ -159,11 +166,11 @@ const EpisodesTable: React.FC<Props> = ({ apiCharacters, totalPagess }) => {
         </TableBody>
       </Table>
       <div>
-        {Array.from({ length: totalPagess }, (_, index) => (
-          <button key={index} onClick={() => setCurrentPage(index + 1)}>
-            {index + 1}
-          </button>
-        ))}
+        <Pagination
+          totalPages={totalPagess}
+          onPageChange={onPageChange}
+          currentPage={currentPage}
+        />
       </div>
     </>
   );

@@ -2,7 +2,7 @@
 import React from "react";
 import AddCharacterForm from "@/components/AddCharacterForm/AddCharacterForm";
 import CharactersTable from "@/components/CharactersTable/CharactersTable";
-import useCharacters from "@/hooks/useCharacters";
+import useCharacters from "@/hooks/characters/useCharacters";
 import Loading from "@/components/Loading/Loading";
 
 const Home: React.FC = () => {
