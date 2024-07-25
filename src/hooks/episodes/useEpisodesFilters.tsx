@@ -13,9 +13,8 @@ const useEpisodesFilters = (apiCharacters: Character[]) => {
     updateEpisode: state.updateEpisode,
   }));
 
-  const [filters, setFilters] = useState<Record<keyof Episode, string>>(
-    {} as Record<keyof Episode, string>
-  );
+  const [filters, setFilters] = useState<Record<string, string>>({});
+
   const [editingCharacter, setEditingCharacterState] =
     useState<Character | null>(null);
   const [editedField, setEditedField] = useState<string>("");

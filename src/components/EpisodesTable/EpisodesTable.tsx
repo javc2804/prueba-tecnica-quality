@@ -63,11 +63,10 @@ const EpisodesTable: React.FC<Props> = ({
             </TableHead>
             <TableHead>
               <Input
-                placeholder="Filtrar por Episode"
-                onChange={(e) => handleFilterChange("gender", e.target.value)}
+                placeholder="Filtrar por Episodio"
+                onChange={(e) => handleFilterChange("episode", e.target.value)}
               />
             </TableHead>
-
             <TableHead>Air Date</TableHead>
             <TableHead>Acciones</TableHead>
           </TableRow>
